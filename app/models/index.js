@@ -2,10 +2,11 @@ const config = require("../config/db.config");
 
 const Sequelize = require("sequelize");
 
-const sequelize = new Sequelize("tis", "postgres", "password", {
-  host: "localhost",
-  dialect: "postgres",
-});
+const sequelize = new Sequelize(process.env.POSTGRESQL_DB_URI);
+// const sequelize = new Sequelize("tis", "postgres", "password", {
+//   host: "localhost",
+//   dialect: "postgres",
+// });
 
 const db = {};
 

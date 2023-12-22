@@ -50,3 +50,35 @@ const initial = () => {
     name: "admin",
   });
 };
+
+process.on("SIGINT", async () => {
+  try {
+    // Close the Sequelize connection before exiting
+    await db.sequelize.close();
+    console.log("Sequelize connection closed. Exiting...");
+    process.exit(0);
+  } catch (error) {
+    console.error("Error closing Sequelize connection:", error);
+    process.exit(1);
+  }
+});
+
+// Handle unhandled promise rejections
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Promise Rejection at:", promise, "reason:", reason);
+});
+
+// Handle uncaught exceptions
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
+  process.exit(1);
+});
+
+// Close the server on process termination
+process.on("SIGTERM", () => {
+  console.log("Received SIGTERM. Closing server...");
+  server.close(() => {
+    console.log("Server closed. Exiting...");
+    process.exit(0);
+  });
+});

@@ -19,8 +19,14 @@ app.use(
 const db = require("./app/models");
 const Role = db.role;
 
-db.sequelize.sync();
-
+db.sequelize
+  .sync({ force: true })
+  .then(() => {
+    console.log("Database synchronized successfully.");
+  })
+  .catch((error) => {
+    console.error("Error synchronizing the database:", error);
+  });
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to tis application" });
 });
@@ -35,21 +41,6 @@ require("./app/routes/user.routes")(app);
 const APP_PORT = process.env.PORT || 8000;
 
 app.listen(APP_PORT, () => console.log(`app listening on port ${APP_PORT}`));
-
-const initial = () => {
-  Role.create({
-    id: 1,
-    name: "user",
-  });
-  Role.create({
-    id: 2,
-    name: "moderator",
-  });
-  Role.create({
-    id: 3,
-    name: "admin",
-  });
-};
 
 process.on("SIGINT", async () => {
   try {

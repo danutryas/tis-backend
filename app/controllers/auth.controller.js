@@ -12,18 +12,50 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 exports.signup = async (req, res) => {
-  // Save User to Database
   try {
-    const user = await User.create({
-      username: req.body.username,
-      email: req.body.email,
-      phoneNumber: req.body.phoneNumber,
-      password: bcrypt.hashSync(req.body.password, 8),
+    // Extract user input from request body
+    const { username, email, password, name } = req.body;
+
+    // Check if required fields are provided
+    if (!username || !email || !password || !name) {
+      return res.status(400).json({
+        error: "Validation Error",
+        ok: false,
+        status: 400,
+        message: "Name, username, email, and password are required fields.",
+      });
+    }
+
+    // Create a new user
+    const newUser = await User.create({
+      username,
+      name,
+      email,
+      password: bcrypt.hashSync(password, 8),
     });
 
-    if (user) res.send({ message: "User registered successfully!" });
+    if (newUser) {
+      return res.status(201).json({
+        error: null,
+        ok: true,
+        status: 201,
+        message: "User registered successfully!",
+      });
+    } else {
+      return res.status(500).json({
+        error: "Server Error",
+        ok: false,
+        status: 500,
+        message: "Failed to register user. Please Try Again.",
+      });
+    }
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    return res.status(500).json({
+      error: "Server Error",
+      ok: false,
+      status: 500,
+      message: "Internal server error.",
+    });
   }
 };
 
@@ -64,10 +96,10 @@ exports.signin = async (req, res) => {
 
     return res.status(200).send({
       userId: user.userId,
+      name: user.name,
       username: user.username,
       email: user.email,
       token: token,
-      phoneNumber: user.phoneNumber,
     });
   } catch (error) {
     return res.status(500).send({ message: error.message });

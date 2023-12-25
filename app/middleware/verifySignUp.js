@@ -12,8 +12,11 @@ checkDuplicateUsernameOrEmail = async (req, res, next) => {
     });
 
     if (user) {
-      return res.status(400).send({
-        message: "Failed! Username is already in use!",
+      return res.status(400).json({
+        error: "Validation Error",
+        ok: false,
+        status: 400,
+        message: "Username is already exists.",
       });
     }
 
@@ -25,15 +28,21 @@ checkDuplicateUsernameOrEmail = async (req, res, next) => {
     });
 
     if (user) {
-      return res.status(400).send({
-        message: "Failed! Email is already in use!",
+      return res.status(400).json({
+        error: "Validation Error",
+        ok: false,
+        status: 400,
+        message: "Email is already exists.",
       });
     }
 
     next();
   } catch (error) {
-    return res.status(500).send({
-      message: "Unable to validate Username!",
+    return res.status(500).json({
+      error: "Server Error",
+      ok: false,
+      status: 500,
+      message: "Internal server error.",
     });
   }
 };

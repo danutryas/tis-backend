@@ -19,7 +19,7 @@ app.use(
 const db = require("./app/models");
 const Role = db.role;
 
-db.sequelize.sync();
+db.sequelize.sync({ force: true });
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to tis application" });

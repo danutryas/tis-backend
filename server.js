@@ -19,14 +19,8 @@ app.use(
 const db = require("./app/models");
 const Role = db.role;
 
-db.sequelize
-  .sync({ force: true })
-  .then(() => {
-    console.log("Database synchronized successfully.");
-  })
-  .catch((error) => {
-    console.error("Error synchronizing the database:", error);
-  });
+db.sequelize.sync();
+
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to tis application" });
 });

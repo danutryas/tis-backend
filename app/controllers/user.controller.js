@@ -54,7 +54,36 @@ exports.getAssetAll = async (req, res) => {
       ],
     });
 
-    res.status(200).json(likedAssets);
+    // Transforming the data to the desired format
+    const formattedAssets = likedAssets.map((asset) => {
+      return {
+        href: asset.links.href,
+        data: [
+          {
+            center: asset.data.center,
+            title: asset.data.title,
+            keywords: [], // Add your keywords logic here if available
+            location: asset.data.location,
+            nasa_id: asset.data.nasa_id,
+            date_created: asset.data.date_created,
+            media_type: asset.data.media_type,
+            description_508: asset.data.description_508,
+            secondary_creator: asset.data.secondary_creator,
+            description: asset.data.description,
+          },
+        ],
+        links: [
+          {
+            href: asset.links.href,
+            rel: asset.links.rel,
+            render: asset.links.render,
+          },
+          // Add more link objects if available
+        ],
+      };
+    });
+
+    res.status(200).json(formattedAssets);
   } catch (error) {
     res
       .status(500)

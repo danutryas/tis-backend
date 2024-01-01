@@ -7,5 +7,5 @@ module.exports = function (app) {
   });
 
   app.post("/api/asset/like", controller.likeNasaAsset);
-  app.get("/api/asset", controller.getAssetAll);
+  app.get("/api/asset/like", controller.getAssetAll);
 };

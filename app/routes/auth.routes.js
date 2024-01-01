@@ -14,11 +14,5 @@ module.exports = function (app) {
   );
 
   app.post("/api/auth/signin", controller.signin);
-
   app.post("/api/auth/signout", controller.signout);
-
-  app.post("/api/asset/like", controller.likeNasaAsset);
-  app.post("/api/asset", controller.createNasaAsset);
-  app.get("/api/asset/:nasaId", controller.getAsset);
-  app.get("/api/asset", controller.getAssetAll);
 };

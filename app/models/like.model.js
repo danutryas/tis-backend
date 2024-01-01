@@ -5,7 +5,6 @@ const data = (sequelize, Sequelize) => {
       nasa_id: {
         type: Sequelize.TEXT,
         allowNull: false,
-        primaryKey: true,
       },
       center: {
         type: Sequelize.STRING,
@@ -53,54 +52,28 @@ const link = (sequelize, Sequelize) => {
   return AssetLink;
 };
 
-const collection = (sequelize, Sequelize) => {
-  const AssetCollection = sequelize.define(
-    "asset_collection",
+const UserLike = (sequelize, Sequelize) => {
+  const userLike = sequelize.define(
+    "user_like",
     {
       href: {
         type: Sequelize.TEXT,
       },
     },
-    { tableName: "asset_collection", timestamps: false }
+    { tableName: "user_like", timestamps: false }
   );
-  return AssetCollection;
-};
-
-const nasaAsset = (sequelize, Sequelize) => {
-  const NasaAsset = sequelize.define(
-    "nasa_assets",
-    {
-      collection_id: {
-        type: Sequelize.INTEGER,
-      },
-      nasa_id: {
-        type: Sequelize.TEXT,
-      },
-      link_id: {
-        type: Sequelize.INTEGER,
-      },
-    },
-    { tableName: "nasa_asset", timestamps: false }
-  );
-  NasaAsset.belongsTo(data(sequelize, Sequelize), {
-    foreignKey: "nasa_id",
-    targetKey: "nasa_id",
+  userLike.belongsTo(data(sequelize, Sequelize), {
+    foreignKey: "assetDataId",
+    as: "data",
   });
-  NasaAsset.belongsTo(link(sequelize, Sequelize), {
-    foreignKey: "link_id",
-    targetKey: "id",
-  });
-  NasaAsset.belongsTo(collection(sequelize, Sequelize), {
-    foreignKey: "collection_id",
-    targetKey: "id",
+  userLike.belongsTo(link(sequelize, Sequelize), {
+    foreignKey: "assetLinkId",
+    as: "links",
   });
 
-  return NasaAsset;
+  return userLike;
 };
 
-module.exports = {
-  collection,
-  link,
-  data,
-  nasaAsset,
-};
+// Define associations
+
+module.exports = { UserLike, data, link };
